@@ -6,8 +6,8 @@ class Idea < ActiveRecord::Base
   has_many :users, through: :memberships
   has_many :users, through: :likes
 
-  has_attached_file :image, :styles => { :medium => "300x300>", :thumb => "100x100>" }, :default_url => "https://upload.wikimedia.org/wikipedia/commons/4/47/Comic_image_missing.png"
-  validates_attachment_content_type :image, :content_type => /\Aimage\/.*\Z/
+  # has_attached_file :image, :styles => { :medium => "300x300>", :thumb => "100x100>" }, :default_url => "https://upload.wikimedia.org/wikipedia/commons/4/47/Comic_image_missing.png"
+  # validates_attachment_content_type :image, :content_type => /\Aimage\/.*\Z/
 
   validates :title, presence: true
 
