@@ -1,0 +1,64 @@
+<h1><%= @idea.title %></h1>
+
+<p>
+  <strong>Description:</strong>
+  <%= @idea.description %>
+</p>
+
+<p>
+  <strong>Created By:</strong>
+  <%= @idea.user_full_name %>
+</p>
+
+<p>
+  <strong>Likes:</strong>
+  <%= @idea.likes.count %>
+</p>
+
+<p>
+  <strong>Members (<%= @idea.memberships.count %>):</strong>
+  <ul>
+    <% @idea.memberships.each do |member| %>
+      <li><%= member.user_full_name %></li>
+    <% end %>
+  </ul>
+</p>
+
+<%= link_to "Images", @idea.image.url %>
+<br>
+
+<% if can? :edit, @idea %>
+<%= link_to 'Edit', edit_idea_path(@idea), class: "btn btn-warning" %>
+<% end %>
+<% if can? :destroy, @idea %>
+<%= link_to 'Delete', @idea, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger" %>
+<% end %>
+
+<h2>Comments</h2>
+
+<% @idea.comments.order("created_at DESC").each do |com|%>
+  <%= content_tag(:div) do %>
+    <%= com.body %> |
+    <%= com.created_at.strftime("%B %d, %Y") %>
+    <% if can? :edit, com %>
+    <%= link_to "Edit", edit_idea_comment_path(@idea, com) %> |
+    <% end %>
+    <% if can? :destroy, com %>
+    <%= link_to "Delete", [@idea, com],
+                          method: :delete,
+                          style: "text-align: right;",
+                          data: {confirm: "Are you sure?"}%>
+    <% end %>
+    <hr>
+  <% end %>
+<% end %>
+
+<h3>Create a Comment</h3>
+<%= @comment.errors.full_messages.join(", ") %>
+<%= form_for [@idea, @comment] do |f| %>
+  <%= content_tag(:div, class: "form-group") do %>
+    <%= f.label :body %>
+    <%= f.text_area :body, class: "form-control" %>
+  <% end %>
+  <%= f.submit class: "btn btn-primary" %>
+<% end %>
